@@ -18,7 +18,7 @@ function App() {
             />
             <Route
               path="/home"
-              element={<PrivateRoute element={<div className="flex items-center justify-center h-screen"><Countdown targetDate="2024-08-03T20:46:00" /></div>} />}
+              element={<PrivateRoute element={<div className="flex items-center justify-center h-screen"><Countdown targetDate="2024-08-03T21:10:00" /></div>} />}
             />
           </Routes>
         </div>

@@ -1,22 +1,28 @@
 import React from 'react';
 
 const CountdownTimer = ({ timeLeft }) => {
-  const timerComponents = [];
-
-  Object.keys(timeLeft).forEach(interval => {
-    if (timeLeft[interval] || interval === 'days') {
-      timerComponents.push(
-        <div key={interval} className="flex flex-col items-center mx-2 sm:mx-4">
-          <span className="text-3xl sm:text-6xl">{timeLeft[interval]}</span>
-          <span className="text-lg sm:text-2xl">{interval}</span>
-        </div>
-      );
-    }
-  });
+  const { days = 0, hours = 0, minutes = 0, seconds = 0 } = timeLeft;
 
   return (
-    <div className="w-full flex items-center justify-center">
-      {timerComponents.length ? timerComponents : null}
+    <div className="flex flex-col items-center justify-center text-3xl text-white">
+      <div className="flex space-x-6">
+        <div className="text-7xl">
+          {days.toString().padStart(2, '0')}
+          <div className="text-md">Days</div>
+        </div>
+        <div className="text-7xl">
+          {hours.toString().padStart(2, '0')}
+          <div className="text-md">Hours</div>
+        </div>
+        <div className="text-7xl">
+          {minutes.toString().padStart(2, '0')}
+          <div className="text-md">Minutes</div>
+        </div>
+        <div className="text-7xl">
+          {seconds.toString().padStart(2, '0')}
+          <div className="text-md">Seconds</div>
+        </div>
+      </div>
     </div>
   );
 };
