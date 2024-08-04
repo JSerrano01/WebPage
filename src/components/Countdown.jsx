@@ -1,9 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import CountdownTimer from './CountdownTimer';
 import CountdownEnd from './CountdownEnd';
-import backgroundVideo from '../static/background.mp4';
+import backgroundGif from '../static/background_entry.gif';
 
 const Countdown = ({ targetDate }) => {
+  const navigate = useNavigate(); // Usa useNavigate para la redirección
+
+  useEffect(() => {
+    // Check if the page was reloaded
+    const wasReloaded = sessionStorage.getItem('wasReloaded');
+
+    if (wasReloaded) {
+      // If the page was reloaded, redirect to the root
+      navigate('/');
+    } else {
+      // Set the reloaded flag in session storage
+      sessionStorage.setItem('wasReloaded', 'true');
+    }
+
+    return () => {
+      // Remove the reloaded flag when the component unmounts
+      sessionStorage.removeItem('wasReloaded');
+    };
+  }, [navigate]);
+
   const calculateTimeLeft = () => {
     const difference = +new Date(targetDate) - +new Date();
     let timeLeft = {};
@@ -22,7 +43,7 @@ const Countdown = ({ targetDate }) => {
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [hasEnded, setHasEnded] = useState(false);
-  const [fadeIn, setFadeIn] = useState(true); // Agregado para el efecto fade-in
+  const [fadeIn, setFadeIn] = useState(true);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -33,7 +54,6 @@ const Countdown = ({ targetDate }) => {
       }
     }, 1000);
 
-    // Desactivar el fade-in después de 2 segundos
     const fadeTimer = setTimeout(() => {
       setFadeIn(false);
     }, 2000);
@@ -46,15 +66,11 @@ const Countdown = ({ targetDate }) => {
 
   return (
     <div className={`relative w-full h-screen overflow-hidden ${fadeIn ? 'fade-in' : ''}`}>
-      <video
+      <img
+        src={backgroundGif}
+        alt="Background"
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
-        autoPlay
-        loop
-        muted
-      >
-        <source src={backgroundVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      />
       <div
         className={`absolute inset-0 flex items-center justify-center z-10 text-white text-center transition-opacity duration-1000 ${hasEnded ? 'opacity-0' : 'opacity-100'}`}
         style={{ fontFamily: 'Monster Clubhouse, sans-serif' }}

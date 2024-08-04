@@ -16,7 +16,7 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (code === 'prueba') {
+        if (code === 'Prueba') {
             login();
             navigate('/home');
         } else {
