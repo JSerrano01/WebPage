@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Para redirigir al usuario
 import CountdownTimer from './CountdownTimer';
 import CountdownEnd from './CountdownEnd';
 import backgroundGif from '../static/background_entry.gif';
+import { useAuth } from '../components/AuthContext'; // Para acceder al contexto de autenticación
 
 const Countdown = ({ targetDate }) => {
   const calculateTimeLeft = () => {
@@ -24,6 +26,9 @@ const Countdown = ({ targetDate }) => {
   const [hasEnded, setHasEnded] = useState(false);
   const [fadeIn, setFadeIn] = useState(true); // Agregado para el efecto fade-in
 
+  const { logout } = useAuth(); // Accede a la función de logout del contexto de autenticación
+  const navigate = useNavigate(); // Para redirigir al usuario
+
   useEffect(() => {
     const timer = setInterval(() => {
       const timeLeft = calculateTimeLeft();
@@ -38,11 +43,30 @@ const Countdown = ({ targetDate }) => {
       setFadeIn(false);
     }, 2000);
 
+    // Manejar la inactividad del usuario
+    let inactivityTimer;
+    
+    const handleUserActivity = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        logout();
+        navigate('/'); // Redirigir al usuario a la página de inicio de sesión
+      }, 60000); // 1 minuto de inactividad
+    };
+
+    window.addEventListener('mousemove', handleUserActivity);
+    window.addEventListener('keydown', handleUserActivity);
+
+    handleUserActivity(); // Inicializa el temporizador en el montaje
+
     return () => {
       clearInterval(timer);
       clearTimeout(fadeTimer);
+      clearTimeout(inactivityTimer);
+      window.removeEventListener('mousemove', handleUserActivity);
+      window.removeEventListener('keydown', handleUserActivity);
     };
-  }, [targetDate]);
+  }, [targetDate, logout, navigate]);
 
   return (
     <div className={`relative w-full h-screen overflow-hidden ${fadeIn ? 'fade-in' : ''}`}>

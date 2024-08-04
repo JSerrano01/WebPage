@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Countdown from './components/Countdown';
 import Login from './components/Login';
-import PrivateRoute from './components/PrivateRoute'; // Asegúrate de importar PrivateRoute
+import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './components/AuthContext';
 import './App.css';
 
