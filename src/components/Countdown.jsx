@@ -22,6 +22,7 @@ const Countdown = ({ targetDate }) => {
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
   const [hasEnded, setHasEnded] = useState(false);
+  const [fadeIn, setFadeIn] = useState(true); // Agregado para el efecto fade-in
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,11 +33,19 @@ const Countdown = ({ targetDate }) => {
       }
     }, 1000);
 
-    return () => clearInterval(timer);
+    // Desactivar el fade-in después de 2 segundos
+    const fadeTimer = setTimeout(() => {
+      setFadeIn(false);
+    }, 2000);
+
+    return () => {
+      clearInterval(timer);
+      clearTimeout(fadeTimer);
+    };
   }, [targetDate]);
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className={`relative w-full h-screen overflow-hidden ${fadeIn ? 'fade-in' : ''}`}>
       <video
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         autoPlay
