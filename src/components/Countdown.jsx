@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import backgroundVideo from '../static/background.mp4'; // Ajusta la ruta según la estructura de tu proyecto
+import CountdownTimer from './CountdownTimer';
+import CountdownEnd from './CountdownEnd';
+import backgroundVideo from '../static/background.mp4';
 
 const Countdown = ({ targetDate }) => {
   const calculateTimeLeft = () => {
@@ -9,9 +11,9 @@ const Countdown = ({ targetDate }) => {
     if (difference > 0) {
       timeLeft = {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-        seconds: Math.floor((difference / 1000) % 60)
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000)
       };
     }
 
@@ -19,33 +21,24 @@ const Countdown = ({ targetDate }) => {
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [hasEnded, setHasEnded] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
+    const timer = setInterval(() => {
+      const timeLeft = calculateTimeLeft();
+      setTimeLeft(timeLeft);
+      if (Object.keys(timeLeft).length === 0) {
+        setHasEnded(true);
+      }
     }, 1000);
 
-    return () => clearTimeout(timer);
-  });
-
-  const timerComponents = [];
-
-  Object.keys(timeLeft).forEach(interval => {
-    if (!timeLeft[interval]) {
-      return;
-    }
-
-    timerComponents.push(
-      <span key={interval}>
-        {timeLeft[interval]} {interval}{" "}
-      </span>
-    );
-  });
+    return () => clearInterval(timer);
+  }, [targetDate]);
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
       <video
-        className="absolute top-1/2 left-1/2 w-full h-full object-cover transform -translate-x-1/2 -translate-y-1/2 z-[-1]"
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
         autoPlay
         loop
         muted
@@ -53,8 +46,21 @@ const Countdown = ({ targetDate }) => {
         <source src={backgroundVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <div className="relative z-10 text-white text-center text-3xl" style={{ fontFamily: 'Monster Clubhouse, sans-serif' }}>
-        {timerComponents.length ? timerComponents : <span>Time's up!</span>}
+      <div
+        className={`absolute inset-0 flex items-center justify-center z-10 text-white text-center transition-opacity duration-1000 ${hasEnded ? 'opacity-0' : 'opacity-100'}`}
+        style={{ fontFamily: 'Monster Clubhouse, sans-serif' }}
+      >
+        <div className="w-full max-w-5xl rounded-3xl p-4 bg-black bg-opacity-50">
+          <CountdownTimer timeLeft={timeLeft} />
+        </div>
+      </div>
+      <div
+        className={`absolute inset-0 flex items-center justify-center z-10 text-white text-center transition-opacity duration-1000 ${hasEnded ? 'opacity-100' : 'opacity-0'}`}
+        style={{ fontFamily: 'Monster Clubhouse, sans-serif' }}
+      >
+        <div className="w-full max-w-5xl rounded-3xl p-4 bg-black bg-opacity-50">
+          <CountdownEnd />
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext';
 import image from '../static/medusa.png';
 
 function Login() {
@@ -7,18 +8,20 @@ function Login() {
     const [flash, setFlash] = useState(false);
     const [fadeIn, setFadeIn] = useState(false);
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     useEffect(() => {
-        setFadeIn(true); // Activar la animación de fade-in cuando el componente se monta
+        setFadeIn(true);
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (code === 'prueba') {
+            login();
             navigate('/home');
         } else {
             setFlash(true);
-            setTimeout(() => setFlash(false), 1000); // Remove the flash class after 1 second
+            setTimeout(() => setFlash(false), 1000);
         }
     };
 
