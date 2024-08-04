@@ -3,22 +3,26 @@ import image from '../static/medusa.png';
 
 const CountdownEnd = () => {
   return (
-    <div className="w-full max-w-5xl rounded-3xl p-4 grid grid-cols-2 gap-4 items-center justify-center">
-      <div className="flex items-center justify-center">
-        <img src={image} alt="Medusa" className="w-2/4 h-auto max-w-full max-h-full" />
+    <div className="w-full max-w-xs md:max-w-5xl rounded-3xl p-4 flex flex-row sm:flex-row gap-4 items-center justify-center">
+      <div className="flex items-center justify-center flex-1">
+        <img 
+          src={image} 
+          alt="Medusa" 
+          className="w-3/4 sm:w-2/4 h-auto max-w-xs sm:max-w-md lg:max-w-lg"
+        />
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center flex-1">
         <a
           href="https://www.spotify.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-5xl flex items-center group"
+          className="text-3xl sm:text-5xl flex items-center group"
         >
           <svg
             role="img"
             viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
-            className="w-20 h-20 mr-2 transition-colors duration-300 group-hover:text-green-500"
+            className="w-10 h-10 sm:w-20 sm:h-20 mr-1 transition-colors duration-300 group-hover:text-green-500"
             fill="currentColor"
           >
             <title>Spotify</title>

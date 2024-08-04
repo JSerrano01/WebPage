@@ -76,7 +76,7 @@
 /* En tu archivo CSS */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 2s forwards;
+  animation: fadeIn 4s forwards;
 }
 
 @keyframes fadeIn {
@@ -96,4 +96,8 @@
 
 body {
   font-family: 'Monster Clubhouse', sans-serif;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 }
